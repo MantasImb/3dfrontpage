@@ -10,12 +10,10 @@ import create from 'zustand'
 const useStore = create((set) => {
   new FontLoader().load('/font.blob', (font) => {
     set({
-      items: [
-        { position: [0, 0, 0], r: 0.4, geometry: new THREE.IcosahedronGeometry(6) }
-      ]
+      items: [{ position: [0, 0, 0], r: 0.4, geometry: new THREE.IcosahedronGeometry(6) }]
     })
   })
-  return { items: [], material: new THREE.MeshStandardMaterial({color: "#B60101"}) }
+  return { items: [], material: new THREE.MeshStandardMaterial({ color: '#d90000' }) }
 })
 
 function Geometry({ r, position, ...props }) {
@@ -48,24 +46,24 @@ function Geometries() {
 function Rig() {
   const { camera, mouse } = useThree()
   const vec = new THREE.Vector3()
-  return useFrame(() => camera.position.lerp(vec.set(mouse.x * 2, mouse.y * 1, camera.position.z), 0.02))
+  return useFrame(() => camera.position.lerp(vec.set(mouse.x * 2, mouse.y * 1, camera.position.z), 0.2))
 }
 
 export default function ThreeCanvas() {
   const { color } = useSpring({ color: 0, from: { color: 1 }, config: { friction: 50 }, loop: true })
   return (
     <Canvas camera={{ position: [0, 0, 15], near: 5, far: 40 }}>
-      <color attach="background" args={['white']} />
-      <a.fog attach="fog" args={['white', 10, 40]} color={color.to([0, 0.2, 0.4, 0.7, 1], ['white', 'red', 'white', 'red', 'white'])} />
-      <ambientLight intensity={0.8} />
-      <directionalLight castShadow position={[2.5, 12, 12]} intensity={4} />
+      {/* <color attach="background" args={['white']} /> */}
+      {/* <a.fog attach="fog" args={['white', 10, 40]} color={color.to([0, 0.2, 0.4, 0.7, 1], ['white', 'red', 'white', 'red', 'white'])} /> */}
+      <ambientLight intensity={0.3} />
+      <directionalLight castShadow position={[2.5, 12, 12]} intensity={0.5} />
       <pointLight position={[20, 20, 20]} />
-      <pointLight position={[-20, -20, -20]} intensity={5} />
+      <pointLight position={[-20, -20, -20]} intensity={0.3} />
       <Suspense fallback={null}>
         <Geometries />
-        <ContactShadows position={[0, -7, 0]} opacity={0.75} scale={40} blur={1} far={9} />
+        {/* <ContactShadows position={[0, -7, 0]} opacity={0.75} scale={40} blur={1} far={9} /> */}
         <EffectComposer disableNormalPass>
-          <N8AO aoRadius={3} distanceFalloff={3} intensity={1} />
+          <N8AO aoRadius={3} distanceFalloff={3} intensity={0.3} />
         </EffectComposer>
       </Suspense>
       <Rig />
